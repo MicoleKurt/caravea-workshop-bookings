@@ -35,6 +35,10 @@ Tests: `cd api && vendor/bin/pest` (17 tests, including the concurrency test).
 
 The API is `apiResource('bookings')` under `/api`: `GET/POST /bookings`, `GET/PATCH/DELETE /bookings/{id}`, with `?status=` and `?per_page=` on the list.
 
+## Design
+
+A dealer workshop is a craft business, so the interface reads like a well-kept job ledger, not a SaaS dashboard: warm paper, ink, one eucalyptus green for actions and one terracotta for attention. Headings are an editorial serif (Instrument Serif), the interface is Schibsted Grotesk, and times and number plates are mono because they are codes. Bookings are grouped by day, status is a dot and a word, and the rego is drawn as a number plate. It reflows to a stacked layout on phones, respects `prefers-reduced-motion`, and every field error is announced and linked with `aria-describedby`.
+
 ## Senior write-up
 
 **Caching and revalidation.** Reads are cached with `use cache` (`getBookings(status, page)`, `getBooking(id)`), tagged `bookings` and `booking-{id}`, with `cacheLife("minutes")`. The filter and page are function arguments, so every combination is its own cache entry and the URL stays the only state. Every Server Action ends with `updateTag(...)` on the list tag and the detail tag, because a user who saves a booking must see it on the next render, not a stale copy. I chose `updateTag` over `revalidateTag(..., "max")` for that reason: stale-while-revalidate is right for content, wrong for "I just booked the bay". Reading `searchParams` and `params` is request-time, so those reads sit in small async components behind `<Suspense>`: the shell streams immediately and the data fills in. Writes always go to Laravel uncached (`cache: "no-store"`).

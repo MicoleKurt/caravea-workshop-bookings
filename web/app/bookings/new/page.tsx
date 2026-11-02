@@ -7,6 +7,7 @@ export const metadata: Metadata = { title: "New booking" };
 export default function NewBookingPage() {
   return (
     <>
+      <p className="eyebrow">Workshop</p>
       <h1>New booking</h1>
       <BookingForm action={createBooking} submitLabel="Create booking" cancelHref="/bookings" />
     </>

@@ -10,6 +10,7 @@ export const metadata: Metadata = { title: "Edit booking" };
 export default function EditBookingPage({ params }: PageProps<"/bookings/[id]/edit">) {
   return (
     <>
+      <p className="eyebrow">Workshop</p>
       <h1>Edit booking</h1>
       <Suspense fallback={<p aria-busy="true">Loading booking…</p>}>
         <EditForm params={params} />
